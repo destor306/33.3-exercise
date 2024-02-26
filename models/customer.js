@@ -123,7 +123,7 @@ class Customer {
     }
   }
   // This function should return first and last names joined by a sapce.
-  fullName(){
+  get fullName(){
     return `${this.firstName} ${this.lastName}`
   }
 }
