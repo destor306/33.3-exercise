@@ -53,6 +53,24 @@ class Customer {
     return new Customer(customer);
   }
 
+  /** get a customer by first name. */
+
+  static async getByName(name) {
+    console.log(name);
+    const results = await db.query(
+      `SELECT id, 
+        first_name AS "firstName",  
+        last_name AS "lastName", 
+        phone, 
+        notes 
+        FROM customers WHERE first_name ILIKE $1 OR last_name ILIKE $2`,
+      [`%${name}%`,`%${name}%` ]
+    );
+    
+    return results.rows.map(c => new Customer(c));
+
+  }
+
   /** get all reservations for this customer. */
 
   async getReservations() {

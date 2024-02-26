@@ -46,6 +46,21 @@ router.post("/add/", async function(req, res, next) {
   }
 });
 
+router.get("/search", async function (req, res, next){
+  try{
+    const {name} = req.query;
+    console.log(name);
+    const customers = await Customer.getByName(req.query.name);
+    
+
+    res.render("customer_list.html", {customers})
+  }
+  catch(e){
+    console.log("Error:", e);
+    return next(e);
+  }
+})
+
 /** Show a customer, given their ID. */
 
 router.get("/:id/", async function(req, res, next) {
@@ -71,6 +86,8 @@ router.get("/:id/edit/", async function(req, res, next) {
     return next(err);
   }
 });
+
+
 
 /** Handle editing a customer. */
 
