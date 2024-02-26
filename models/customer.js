@@ -56,7 +56,7 @@ class Customer {
   /** get a customer by first name. */
 
   static async getByName(name) {
-    console.log(name);
+    
     const results = await db.query(
       `SELECT id, 
         first_name AS "firstName",  
@@ -69,6 +69,32 @@ class Customer {
     
     return results.rows.map(c => new Customer(c));
 
+  }
+  /** get Top 10 customers by order */
+  static async getTop10(){
+    const results = await db.query(
+      ` SELECT c.id, c.first_name, c.last_name, c.phone, c.notes,
+      COUNT(RV.customer_id) AS reservation_count
+      FROM reservations AS RV
+      JOIN customers AS c
+      ON RV.customer_id = c.id
+      GROUP BY c.id
+      ORDER BY reservation_count DESC
+      LIMIT 10      
+      `
+    )
+    // results.rows.forEach(c=> {
+    //   console.log(`${c.first_name} ${c.last_name}`)
+    // })
+    const customersData = results.rows.map(c =>
+      new Customer({
+        id: c.id,
+        firstName : c.first_name,
+        lastName: c.last_name,
+        phone: c.phone,
+        notes: c.notes
+    }));
+    return customersData;
   }
 
   /** get all reservations for this customer. */

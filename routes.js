@@ -46,6 +46,19 @@ router.post("/add/", async function(req, res, next) {
   }
 });
 
+/** Show top 10 customers */
+router.get("/top10", async function(req, res, next){
+  try{
+    const customers= await Customer.getTop10();
+    //console.log(customers);
+    return res.render("customer_top10.html", {customers})
+  }
+  catch(e){
+    return next(e);
+  }
+})
+
+
 router.get("/search", async function (req, res, next){
   try{
     const {name} = req.query;
@@ -53,13 +66,15 @@ router.get("/search", async function (req, res, next){
     const customers = await Customer.getByName(req.query.name);
     
 
-    res.render("customer_list.html", {customers})
+    return res.render("customer_list.html", {customers})
   }
   catch(e){
     console.log("Error:", e);
     return next(e);
   }
 })
+
+
 
 /** Show a customer, given their ID. */
 
@@ -74,6 +89,7 @@ router.get("/:id/", async function(req, res, next) {
     return next(err);
   }
 });
+
 
 /** Show form to edit a customer. */
 
