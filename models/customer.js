@@ -78,6 +78,10 @@ class Customer {
       );
     }
   }
+  // This function should return first and last names joined by a sapce.
+  fullName(){
+    return `${this.firstName} ${this.lastName}`
+  }
 }
 
 module.exports = Customer;
